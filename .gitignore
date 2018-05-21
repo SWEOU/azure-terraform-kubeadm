@@ -1,0 +1,9 @@
+# Terraform state files
+*.tfstate
+*.tfstate.backup
+*.tfstate.*.backup
+*.tfstate.lock.info
+*.tfvars
+.terraform
+modules/scrap
+config
