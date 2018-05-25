@@ -4,6 +4,7 @@
 *.tfstate.*.backup
 *.tfstate.lock.info
 *.tfvars
+backend.tf
 .terraform
-modules/scrap
+scrap
 config
