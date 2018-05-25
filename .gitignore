@@ -6,5 +6,5 @@
 *.tfvars
 backend.tf
 .terraform
-scrap
+scrap/
 config

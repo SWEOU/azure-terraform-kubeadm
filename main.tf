@@ -159,7 +159,7 @@ resource "random_id" "randomId" {
 resource "azurerm_storage_account" "stor" {
   name                     = "diag${random_id.randomId.hex}"
   resource_group_name      = "${azurerm_resource_group.rg-kubernetes.name}"
-  location                 = "${azurerm_resource_group.rg-kubernetes.location"
+  location                 = "${azurerm_resource_group.rg-kubernetes.location}"
   account_tier             = "${var.storage_account_tier}"
   account_replication_type = "${var.storage_account_type}"
   
