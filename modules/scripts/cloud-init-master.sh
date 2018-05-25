@@ -119,8 +119,9 @@ EOF
 kubeadm init --config /tmp/kubeadm.yaml
 
 # copy /etc/kubernetes/admin.conf so we can use kubectl
-cp -i /etc/kubernetes/admin.conf /home/theadmin/kubeconfig
-sudo chown 1000:1000 /home/theadmin/kubeconfig
+mkdir -p /home/theadmin/.kube/
+cp -i /etc/kubernetes/admin.conf /home/theadmin/.kube/config
+sudo chown 1000:1000 /home/theadmin/.kube/config
 
 export KUBECONFIG='/etc/kubernetes/admin.conf'
 
