@@ -15,6 +15,7 @@ export CLUSTER_CIDR=${cluster_cidr}
 export SECURITY_GROUP_NAME=${security_group_name}
 export PRIMARY_SCALESET_NAME=${primary_scaleset_name}
 export ROUTE_TABLE_NAME=${route_table_name}
+export ADDONS="${addons}"
 LOCAL_IP_ADDRESS=$(ifconfig eth0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p')
 
 # install docker & kubeadm - ubuntu
@@ -219,5 +220,10 @@ EOF
 
 kubectl apply -f /etc/kubernetes/addons/azure-storage-classes.yaml
 
-# --------------------------------------------
-echo 'configuration complete' > /tmp/hello.txt
+# Load addons
+for ADDON in $ADDONS
+do
+  curl $ADDON | envsubst > /tmp/addon.yaml
+  kubectl apply -f /tmp/addon.yaml
+  rm /tmp/addon.yaml
+done

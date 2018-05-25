@@ -1,27 +1,28 @@
-variable "azure_subscription_id" {
-  description = "Azure Subscription ID"
-}
-
-variable "azure_client_id" {
-  description = "Azure Client ID"
-}
-
-variable "azure_client_secret" {
-  description = "Azure Client Secret"
-}
-
-variable "azure_tenant_id" {
-  description = "Azure Tenant ID"
+variable "k8s_resource_group_name" {
+  description = "The name of the resource group in which the resources will be created"
+  default     = "rg-kubernetes"
 }
 
 variable "vnet_resource_group_name" {
   description = "The name of the resource group in which the resources will be created"
-  default     = "rg-vnet-hashinetes"
+  default     = "rg-vnet-kubernetes"
 }
 
-variable "k8s_resource_group_name" {
-  description = "The name of the resource group in which the resources will be created"
-  default     = "rg-hashinetes"
+variable "vnet_name" {
+  description = "The name of the vNet that will be created in Azure"
+}
+
+variable "subnet_name" {
+  description = "The name of the subnet that the cluster will join"
+  default = "subnet-k8s"
+}
+
+variable "cluster_cidr" {
+  description = "CIDR range for k8s"
+}
+
+variable "k8s_cluster_name" {
+  description = "The domain label that will be used for the master front-end IP"
 }
 
 variable "location" {
@@ -29,49 +30,9 @@ variable "location" {
   default     = "eastus"
 }
 
-variable "kubernetes_version" {
-  description = "Version of kubernetes to be installed"
-  default     = "1.10.2"
-}
-
-variable "k8s_cluster_name" {
-  description = "The domain label that will be used for the master front-end IP"
-  default     = "hashinetesnje01"
-}
-
-variable "masters_vm_size" {
+variable "vm_size" {
   default     = "Standard_DS2_v2"
   description = "Size of the Virtual Machine based on Azure sizing"
-}
-
-variable "agents_vm_size" {
-  default     = "Standard_DS2_v2"
-  description = "Size of the Virtual Machine based on Azure sizing"
-}
-
-variable "vnet_name" {
-  default     = "vnet-hashinetes"
-  description = "The name of the vNet that will be created in Azure"
-}
-
-variable "vnet_cidr" {
-  default     = "10.0.0.0/16"
-  description = "The name of the cidr notation that will be used when creating the vNet in Azure"
-}
-
-variable "subnet_name" {
-  default     = "subnet-k8s"
-  description = "The name of the vNet that will be created in Azure"
-}
-
-variable "subnet_prefix" {
-  default     = "10.0.0.0/24"
-  description = "The name of the cidr notation that will be used when creating the subnet in Azure"
-}
-
-variable "masters_vm_count" {
-  default     = 1
-  description = "The number of kubernetes masters that will be created in Azure"
 }
 
 variable "vmscaleset_name" {
@@ -82,6 +43,11 @@ variable "vmscaleset_name" {
 variable "nb_instance" {
   description = "Specify the number of vm instances"
   default     = 1
+}
+
+variable "vm_count" {
+  default     = 1
+  description = "The number of kubernetes masters that will be created in Azure"
 }
 
 variable "vm_os_publisher" {
@@ -104,6 +70,16 @@ variable "vm_os_version" {
   default     = "latest"
 }
 
+variable "admin_username" {
+  description = "The admin username of the VMSS that will be deployed"
+  default     = "theadmin"
+}
+
+variable "ssh_key" {
+  description = "Path to the public key to be used for ssh access to the VM"
+  default     = "~/.ssh/id_rsa.pub"
+}
+
 variable "tags" {
   type        = "map"
   description = "A map of the tags to use on the resources that are deployed with this module."
@@ -112,3 +88,43 @@ variable "tags" {
     source = "terraform"
   }
 }
+
+variable "kubernetes_version" {
+  description = "Version of kubernetes to be installed"
+  default     = "1.10.2"
+}
+
+variable "addons" {
+    description = "list of YAML files with Kubernetes addons which should be installed"
+    type        = "list"
+}
+
+variable "cloudconfig_masters_file" {
+  description = "The location of the cloud init configuration file."
+  default     = "./scripts/cloud-init-master.sh"
+}
+
+variable "cloudconfig_agent_file" {
+  description = "The location of the cloud init configuration file."
+  default     = "./scripts/cloud-init-agent.sh"
+}
+
+variable "storage_account_tier" {
+  description = "The tier of azure blob storage to use for diagnostic logs."
+  default     = "standard"
+}
+
+variable "storage_account_type" {
+  description = "The replication type of azure blob storage to use for diagnostic logs."
+  default     = "LRS"
+}
+
+variable "managed_disk_type" {
+  default     = "Premium_LRS"
+  description = "Type of managed disk for the VMs that will be part of this compute group. Allowable values are 'Standard_LRS' or 'Premium_LRS'."
+}
+
+
+
+
+
