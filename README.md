@@ -61,9 +61,8 @@ Currently, following addons are supported:
 * Kubernetes dashboard
 * Heapster for resource monitoring
 * Storage class for automatic provisioning of persisitent volumes
-* External DNS (Replaces Route53 mapper)
+* External DNS 
 * Ingress
-* Autoscaler
 * Logging with Fluentd + ElasticSearch + Kibana
 
 The addons will be installed automatically based on the Terraform variables. 
