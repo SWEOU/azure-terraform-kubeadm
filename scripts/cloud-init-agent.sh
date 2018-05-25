@@ -70,7 +70,7 @@ EOF
 
 # Fix kubelet configuration
 # sed -i '/Environment="KUBELET_KUBECONFIG_ARGS/a\\Environment="KUBELET_CGROUP_ARGS=--cgroup-driver=cgroupfs"' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
-sed -i '/Environment="KUBELET_KUBECONFIG_ARGS/a\\Environment="KUBELET_CLOUD_ARGS=--non-masquerade-cidr=10.96.0.0/12 --network-plugin=kubenet --pod-cidr=10.96.0.0/12 --cloud-provider=azure --cloud-config=/etc/kubernetes/azure.json --address=0.0.0.0"' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+sed -i '/Environment="KUBELET_KUBECONFIG_ARGS/a\\Environment="KUBELET_CLOUD_ARGS=--non-masquerade-cidr=10.96.0.0/12 --network-plugin=kubenet --cloud-provider=azure --cloud-config=/etc/kubernetes/azure.json --address=0.0.0.0"' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 sed -i '/ExecStart=\/usr/s/$/ $KUBELET_CLOUD_ARGS/' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
 
 systemctl daemon-reload
