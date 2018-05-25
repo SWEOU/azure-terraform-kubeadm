@@ -164,66 +164,11 @@ EOF
 
 kubectl apply -f /etc/kubernetes/manifests/kube-addon-manager.yaml
 
-mkdir -p /etc/kubernetes/addons
-cat >/etc/kubernetes/addons/azure-storage-classes.yaml <<EOF
-apiVersion: storage.k8s.io/v1beta1
-kind: StorageClass
-metadata:
-  name: default
-  annotations:
-    storageclass.beta.kubernetes.io/is-default-class: "true"
-  labels:
-    kubernetes.io/cluster-service: "true"
-provisioner: kubernetes.io/azure-disk
-parameters:
-  kind: Managed
-  storageaccounttype: Premium_LRS
-  cachingmode: None
----
-apiVersion: storage.k8s.io/v1beta1
-kind: StorageClass
-metadata:
-  name: managed-premium
-  annotations:
-  labels:
-    kubernetes.io/cluster-service: "true"
-provisioner: kubernetes.io/azure-disk
-parameters:
-  kind: Managed
-  storageaccounttype: Premium_LRS
-  cachingmode: None
----
-apiVersion: storage.k8s.io/v1beta1
-kind: StorageClass
-metadata:
-  name: managed-standard
-  annotations:
-  labels:
-    kubernetes.io/cluster-service: "true"
-provisioner: kubernetes.io/azure-disk
-parameters:
-  kind: Managed
-  storageaccounttype: Standard_LRS
-  cachingmode: None
----
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: azurefile
-  annotations:
-  labels:
-    kubernetes.io/cluster-service: "true"
-provisioner: kubernetes.io/azure-file
-parameters:
-  skuName: Standard_LRS
-EOF
-
-kubectl apply -f /etc/kubernetes/addons/azure-storage-classes.yaml
-
 # Load addons
+mkdir -p /etc/kubernetes/addons
 for ADDON in $ADDONS
 do
-  curl $ADDON | envsubst > /tmp/addon.yaml
-  kubectl apply -f /tmp/addon.yaml
-  rm /tmp/addon.yaml
+  FILENAME=`echo $ADDON | awk -Faddons/ '{print $2}' | sed 's/,/ /g'`
+  curl $ADDON | envsubst > /etc/kubernetes/addons/$FILENAME
+  kubectl apply -f /etc/kubernetes/addons/$FILENAME
 done
